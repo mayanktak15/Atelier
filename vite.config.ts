@@ -8,7 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 const allowedHosts =
   process.env.VITE_ALLOWED_HOSTS?.split(",").map((host) => host.trim()) ?? [
-    "stylehorizon.onrender.com",
+    "stylehorizon-production.up.railway.app",
   ];
 
 export default defineConfig({
@@ -17,7 +17,14 @@ export default defineConfig({
       allowedHosts,
     },
   },
+
+  nitro: {
+    preset: "node-server",
+  },
+
   tanstackStart: {
-    server: { entry: "server" },
+    server: {
+      entry: "server",
+    },
   },
 });
