@@ -8,10 +8,10 @@ A modern, editorial fashion e-commerce storefront built with **TanStack Start**,
 
 | Document | Description |
 |---|---|
-| [High-Level Design (HLD)](file:///home/linus/Desktop/atlier/stylehorizon/docs/architecture/HLD.md) | System overview, architecture diagrams, client-server tiers, security & transaction models |
-| [Low-Level Design (LLD)](file:///home/linus/Desktop/atlier/stylehorizon/docs/architecture/LLD.md) | File-based routes, ER diagrams, PostgreSQL stored procedures, triggers, state providers |
-| [What We Have Achieved](file:///home/linus/Desktop/atlier/stylehorizon/docs/achievements.md) | Detailed version history (v1–v6), milestones achieved, and future roadmap |
-| [Utilities Reference](file:///home/linus/Desktop/atlier/stylehorizon/docs/utils.md) | Full API reference for helpers, data mappers, and telemetry functions |
+| [High-Level Design (HLD)](docs/architecture/HLD.md) | System overview, architecture diagrams, client-server tiers, security & transaction models |
+| [Low-Level Design (LLD)](docs/architecture/LLD.md) | File-based routes, ER diagrams, PostgreSQL stored procedures, triggers, state providers |
+| [What We Have Achieved](docs/achievements.md) | Detailed version history (v1–v6), milestones achieved, and future roadmap |
+| [Utilities Reference](docs/utils.md) | Full API reference for helpers, data mappers, and telemetry functions |
 
 ---
 
@@ -24,41 +24,6 @@ A modern, editorial fashion e-commerce storefront built with **TanStack Start**,
 - **State & Data Caching**: [TanStack React Query](https://tanstack.com/query) + React Context (`AuthContext`, `CartContext`)
 - **Backend & Database**: [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, GoTrue Auth, Stored Procedures)
 - **Bundler & Server**: [Vite](https://vitejs.dev/) + [Nitro](https://nitro.unjs.io/)
-
----
-
-## Basic Utilities Quick Reference
-
-Common helper functions located in `src/lib/`:
-
-### 1. Style Utilities (`src/lib/utils.ts`)
-* **`cn(...inputs)`**: Combines `clsx` and `tailwind-merge` for conflict-free conditional Tailwind classes.
-  ```typescript
-  import { cn } from "@/lib/utils";
-  const buttonClass = cn("px-4 py-2 rounded", isActive && "bg-primary text-white");
-  ```
-
-### 2. Currency Formatting (`src/lib/format.ts`)
-* **`inr(amount)`**: Formats numeric values to Indian Rupee strings using Indian locale formatting.
-  ```typescript
-  import { inr } from "@/lib/format";
-  inr(2499); // "₹2,499"
-  ```
-
-### 3. Image Fallbacks (`src/lib/image-fallback.ts`)
-* **`getProductImageFallback(title, category, index)`**: Generates high-quality Unsplash fallbacks when product images are missing or fail to load.
-
-### 4. Product Catalog Hooks (`src/lib/products-db.ts`)
-* **`useProducts()`**: TanStack Query hook fetching all catalog products from Supabase with 30s cache.
-* **`useProduct(slug)`**: Query hook fetching a single product by URL slug.
-* **`mapProductRow(row)`**: Normalizes raw PostgreSQL JSONB columns into typed `Product` objects.
-
-### 5. Admin Helpers (`src/lib/admin-products.ts`)
-* **`seedDemoProducts()`**: Seeds initial mock products into the live database.
-* **`upsertProduct(data, id)`**: Inserts or updates products with serialized JSONB fields.
-* **`deleteProduct(id)`**: Removes products from the database.
-
-*For complete parameters and usage examples, see [docs/utils.md](file:///home/linus/Desktop/atlier/stylehorizon/docs/utils.md).*
 
 ---
 
