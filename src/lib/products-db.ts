@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { Product, Category } from "@/lib/mock-data";
+import { PRODUCTS, type Product, type Category } from "@/lib/mock-data";
 
 // Raw DB row (jsonb fields come as unknown)
 interface ProductRow {
@@ -65,22 +65,34 @@ export function mapProductRow(row: ProductRow): Product {
 export const PRODUCTS_QUERY_KEY = ["products", "all"] as const;
 
 export async function fetchAllProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("id, slug, title, brand, category, subcategory, price, mrp, images, sizes, colors, description, material, tags, stock, trending, rating, review_count")
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return (data ?? []).map((r) => mapProductRow(r as unknown as ProductRow));
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("id, slug, title, brand, category, subcategory, price, mrp, images, sizes, colors, description, material, tags, stock, trending, rating, review_count")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) return PRODUCTS;
+    return data.map((r) => mapProductRow(r as unknown as ProductRow));
+  } catch (err) {
+    console.warn("Failed to fetch products from Supabase, using mock fallback:", err);
+    return PRODUCTS;
+  }
 }
 
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("id, slug, title, brand, category, subcategory, price, mrp, images, sizes, colors, description, material, tags, stock, trending, rating, review_count")
-    .eq("slug", slug)
-    .maybeSingle();
-  if (error) throw error;
-  return data ? mapProductRow(data as unknown as ProductRow) : null;
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("id, slug, title, brand, category, subcategory, price, mrp, images, sizes, colors, description, material, tags, stock, trending, rating, review_count")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return PRODUCTS.find((p) => p.slug === slug) ?? null;
+    return mapProductRow(data as unknown as ProductRow);
+  } catch (err) {
+    console.warn("Failed to fetch product by slug from Supabase, using mock fallback:", err);
+    return PRODUCTS.find((p) => p.slug === slug) ?? null;
+  }
 }
 
 export function useProducts() {
