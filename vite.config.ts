@@ -7,7 +7,15 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 const allowedHosts =
-  process.env.VITE_ALLOWED_HOSTS?.split(",").map((host) => host.trim()) ?? [
+  process.env.VITE_ALLOWED_HOSTS?.split(",")
+    .map((host) =>
+      host
+        .trim()
+        .replace(/^https?:\/\//, "")
+        .replace(/:\d+.*$/, "")
+        .replace(/\/.*$/, "")
+    )
+    .filter(Boolean) ?? [
     "stylehorizon-production.up.railway.app",
     "atelier-pink-zeta.vercel.app",
   ];

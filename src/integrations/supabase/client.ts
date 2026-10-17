@@ -38,9 +38,9 @@ function createSupabaseClient() {
   const SUPABASE_PUBLISHABLE_KEY =
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY) ||
     (typeof process !== 'undefined' && (process.env?.SUPABASE_PUBLISHABLE_KEY || process.env?.VITE_SUPABASE_PUBLISHABLE_KEY)) ||
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder';
+    'sb_publishable_klchhJXL-HMr53NPy0nlzw_YorQ9P_K';
 
-  if (!SUPABASE_URL || SUPABASE_PUBLISHABLE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder') {
+  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     console.warn('[Supabase] Missing SUPABASE_PUBLISHABLE_KEY in environment variables. Falling back gracefully.');
   }
 
