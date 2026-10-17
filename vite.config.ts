@@ -9,7 +9,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 const allowedHosts =
   process.env.VITE_ALLOWED_HOSTS?.split(",").map((host) => host.trim()) ?? [
     "stylehorizon-production.up.railway.app",
-    "atelier-pink-zeta.vercel.app/",
+    "atelier-pink-zeta.vercel.app",
   ];
 
 export default defineConfig({
@@ -20,7 +20,7 @@ export default defineConfig({
   },
 
   nitro: {
-    preset: "node-server",
+    preset: process.env.NITRO_PRESET || (process.env.VERCEL ? "vercel" : "node-server"),
   },
 
   tanstackStart: {
