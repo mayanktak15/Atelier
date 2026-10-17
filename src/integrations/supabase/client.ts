@@ -32,16 +32,21 @@ function createSupabaseClient() {
   // Fall back to process.env for SSR (server-side rendering)
   const SUPABASE_URL =
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_URL) ||
-    (typeof process !== 'undefined' && (process.env?.SUPABASE_URL || process.env?.VITE_SUPABASE_URL)) ||
-    'https://ioiqcajjdjylzaydnqam.supabase.co';
+    (typeof process !== 'undefined' && (process.env?.VITE_SUPABASE_URL || process.env?.SUPABASE_URL));
 
   const SUPABASE_PUBLISHABLE_KEY =
-    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY) ||
-    (typeof process !== 'undefined' && (process.env?.SUPABASE_PUBLISHABLE_KEY || process.env?.VITE_SUPABASE_PUBLISHABLE_KEY)) ||
-    'sb_publishable_klchhJXL-HMr53NPy0nlzw_YorQ9P_K';
+    (typeof import.meta !== 'undefined' &&
+      (import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env?.VITE_SUPABASE_ANON_KEY)) ||
+    (typeof process !== 'undefined' &&
+      (process.env?.VITE_SUPABASE_PUBLISHABLE_KEY ||
+        process.env?.SUPABASE_PUBLISHABLE_KEY ||
+        process.env?.VITE_SUPABASE_ANON_KEY ||
+        process.env?.SUPABASE_ANON_KEY));
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    console.warn('[Supabase] Missing SUPABASE_PUBLISHABLE_KEY in environment variables. Falling back gracefully.');
+    throw new Error(
+      'Missing Supabase environment variables: Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or VITE_SUPABASE_ANON_KEY) are configured in your environment.',
+    );
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
